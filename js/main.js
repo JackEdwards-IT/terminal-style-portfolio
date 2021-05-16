@@ -1,52 +1,88 @@
 const about = document.querySelector('#about')
 const contact = document.querySelector('#contact')
+const help = document.querySelector('#help')
+
 const aboutContent = document.querySelector('#about-content')
 const contactContent = document.querySelector('#contact-content')
+const helpContent = document.querySelector('#help-content')
 
-var textColor = '#00aa00'
+var aboutBox = false;
+var contactBox = false;
+var helpBox = false;
 
-// Command listener for homepage
-var input = document.querySelector('input[name="cmd-prompt"]');
-function returnKeyListener(event){
-    if(event.keyCode == 13){
-        checkInput(input.value);
-    }
-}
-input.addEventListener('keyup', returnKeyListener);
+var titlebarColor = '#85509e'
+var activeWindow = 'home';
 
-function checkInput(input){
-    console.log("\n" + input);
-    document.getElementsByClassName("cmd").value="";
-    switch(input){
-        case "cd about":
-            about.click();
+
+// Keyboard listener
+var homepageInput = document.getElementById("home-input");
+var aboutpageInput = document.getElementById("about-window-input");
+var contactpageInput = document.getElementById("contact-window-input");
+var outputField = homepageInput;
+
+// Simple logic for allowable input
+document.addEventListener('keydown', function (event) {
+    // Determine which window output text to
+    switch (activeWindow) {
+        case "home":
+            outputField = homepageInput;
             break;
         case "about":
-            about.click();
+            outputField = aboutpageInput;
+            break;
+        case "contact":
+            outputField = contactpageInput;
+            break;
+    }
+    // When enter pressed cehck input and clear the input field
+    if (event.code === "Enter") {
+        checkInput();
+        outputField.innerHTML = "";
+        // Backspace functionality 
+    } else if (event.code === "Backspace") {
+        outputField.innerHTML = outputField.innerHTML.slice(0, -1);
+        // Clear if to many characters, housekeeping 
+    } else if (outputField.innerHTML.length > 9) {
+        outputField.innerHTML = "";
+        // valid alphabetical input, add it 
+    } else {
+        if (event.code.length == 4 || event.code == "Space") {
+            outputField.innerHTML += event.key;
+        }
+    }
+});
+
+
+// Validate input and open corresponding window
+function checkInput() {
+    switch (outputField.innerHTML.toLowerCase()) {
+        case "cd about":
+            if (activeWindow == "home") about.click();
+            break;
+        case "about":
+            if (activeWindow == "home") about.click();
             break;
         case "cd contact":
-            contact.click();
+            if (activeWindow == "home") contact.click();
             break;
-        case "contact": 
-            contact.click();
+        case "contact":
+            if (activeWindow == "home") contact.click();
+            break;
+        case "exit":
+            if (activeWindow == "about") aboutBox.close(), activeWindow = "home";
+            else if (activeWindow == "contact") contactBox.close(), activeWindow = "home";
+            break;
+        case "help":
+            help.click();
+            break;
     }
 }
 
-// Command listener for winbox windows
-var windowInput = document.querySelector('input[name="window-cmd-prompt"]');
-function returnWindowKeyListener(event){
-    if(event.keycode == 13)
-        checkWindowInput(input.value);
-}
-windowInput.addEventListener('keyup', returnWindowKeyListener);
 
-function checkWindowInput(input){
-    console.log(input);
-}
 
 // Winbox windows
 about.addEventListener('click', () => {
-    const aboutBox = new WinBox({
+    aboutBox = new WinBox({
         title: 'About Me',
         width: '400px',
         height: '400px',
@@ -55,17 +91,24 @@ about.addEventListener('click', () => {
         bottom: 50,
         left: 50,
         mount: aboutContent,
-        onfocus: function(){
-            this.setBackground(textColor)
+        onfocus: function () {
+            this.setBackground(titlebarColor),
+                windowCursor('about', true)
         },
-        onblur: function(){
+        onblur: function () {
             this.setBackground('#777')
+            windowCursor('about', false)
+        },
+        onclose: function () {
+            windowCursor('about', false)
+            aboutBox = false;
+            if (contactBox != false) contactBox.focus();
         }
     })
 })
 
 contact.addEventListener('click', () => {
-    const contactBox = new WinBox({
+    contactBox = new WinBox({
         title: 'Contact Me',
         width: '400px',
         height: '400px',
@@ -74,11 +117,68 @@ contact.addEventListener('click', () => {
         bottom: 50,
         left: 250,
         mount: contactContent,
-        onfocus: function(){
-            this.setBackground(textColor)
+        onfocus: function () {
+            this.setBackground(titlebarColor),
+                windowCursor('contact', true)
         },
-        onblur: function(){
-            this.setBackground('#777')
+        onblur: function () {
+            this.setBackground('#777'),
+                windowCursor('contact', false)
+        },
+        onclose: function () {
+            windowCursor('contact', false),
+            contactBox = false;
+            if (aboutBox != false) aboutBox.focus();
+
         }
     })
 })
+
+help.addEventListener('click', () => {
+    helpBox = new WinBox({
+        title: 'Help',
+        width: '400px',
+        height: '420px',
+        modal: true,
+        mount: helpContent,
+        background: titlebarColor,
+    })
+})
+
+
+// Turn the flashing cursor on/off and set active window
+
+// TODO simplify this function
+
+function windowCursor(windowName, visible) {
+    var homeCursor = document.getElementById("home-window-cursor");
+    switch (windowName) {
+        case "about":
+            var aboutCursor = document.getElementById("about-window-cursor");
+            if (visible) {
+                aboutCursor.style.visibility = "visible";
+                homeCursor.style.visibility = "hidden";
+                activeWindow = windowName;
+            } else {
+                aboutCursor.style.visibility = "hidden";
+                // check if other winbox is present and set it as active else set home as active
+                homeCursor.style.visibility = contactBox ? "hidden" : "visible";
+                activeWindow = contactBox ? "contact" : "home";
+            }
+            break;
+
+        case "contact":
+            var contactCursor = document.getElementById("contact-window-cursor");
+            if (visible) {
+                contactCursor.style.visibility = "visible";
+                homeCursor.style.visibility = "hidden";
+                activeWindow = windowName;
+            } else {
+                contactCursor.style.visibility = "hidden";
+                // check if other winbox is present and set it as active else set home as active
+                homeCursor.style.visibility = aboutBox ? "hidden" : "visible";
+                activeWindow = aboutBox ? "about" : "home";
+            }
+            break;
+    }
+}

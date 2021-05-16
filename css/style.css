@@ -7,22 +7,43 @@
 }
 
 :root {
-    --text-color: #00aa00;
+    --text-color: #de1e85;
+    --text-color-glow: #de1e84bd;
+    --internal-link-color: white;
+    --external-link-color: #c8c8c8;
+    --heading-color:  #76f5e0;
+    
 }
 
 body {
     font-family: 'Ubunut Mono', sans-serif;
-    background-color: #333;
+    background-color: #252324;
     color: #ccc;
     font-size: 18px;
     line-height: 1.6;
 }
 
-h1 {
+.home-tagline {
     color: var(--text-color);
     font-size: 50px;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 7px var(--text-color-glow);
+}
+/* disable shadow for the blinking cursor */
+.home-tagline:nth-child(3){
+    text-shadow: none;
+}
+
+.window-tagline{
+    font-size: 25px;
+    color: var(--text-color);
     letter-spacing: -2px;
     margin-bottom: 20px;
+    text-shadow: 2px 2px 4px var(--text-color-glow);
+}
+.window-tagline:nth-child(3){
+    text-shadow: none;
 }
 
 h2 {
@@ -31,6 +52,7 @@ h2 {
 
 h3 {
     margin-bottom: 10px;
+    color: var(--heading-color);
 }
 
 ul {
@@ -38,25 +60,13 @@ ul {
 }
 
 a {
-    color: var(--text-color);
+    color: var(--text-color); 
     text-decoration: none;
 }
 p {
     margin: 20px 0;
 }
 
-.cmd {
-    color: var(--text-color);
-    background-color: #333;
-    border: none;
-    padding-left: 2px;
-    font-size: 50px;
-    width: 200px;
-}
-
-.cmd:focus {
-    outline: none;
-}
 
 nav {
     width: 30%;
@@ -64,15 +74,24 @@ nav {
 
 nav ul {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: center;
+    padding-left: 8vw;
 }
 
 nav ul li {
-    color: var(--text-color);
+    padding-left: 30px;
+}
+
+/* Homepage window links */
+nav ul li {
+    color: var(--internal-link-color);
     cursor: pointer;
 }
 
+/* Homepage external links */
+main a {
+    color: var(--external-link-color);
+}
 .container {
     max-width: 600px;
     height: 70vh;
@@ -80,13 +99,14 @@ nav ul li {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: left;
 }
 
 .wb-body {
     background-color: #111;
     padding: 20px;
 }
+
 
 .hidden {
     display: none;
@@ -95,6 +115,7 @@ nav ul li {
 .cursor {
     font-weight: 700;
     animation: 1s blink step-end infinite;
+    
 }
 
 @keyframes blink {
