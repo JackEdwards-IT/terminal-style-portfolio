@@ -4,6 +4,8 @@
 
 This is a small project utilising the [Winbox.js](https://nextapps-de.github.io/winbox/) library for the window manager and some custom Javascript for the basic terminal simulation.
 
+[Live Demo](https://jackedwards-it.github.io/terminal-style-portfolio/)
+
 From the homepage the user can click on the top links to open the about, contact and help windows or they can type a command into the terminal.
 
 ## Site Controls
