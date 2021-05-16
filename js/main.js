@@ -69,8 +69,8 @@ function checkInput() {
             if (activeWindow == "home") contact.click();
             break;
         case "exit":
-            if (activeWindow == "about") aboutBox.close(), activeWindow = "home";
-            else if (activeWindow == "contact") contactBox.close(), activeWindow = "home";
+            if (activeWindow == "about") aboutBox.close(), activeWindow = contactBox ? "contact" : "home";
+            else if (activeWindow == "contact") contactBox.close(), activeWindow = aboutBox ? "about" : "home";
             break;
         case "help":
             help.click();
@@ -127,7 +127,7 @@ contact.addEventListener('click', () => {
         },
         onclose: function () {
             windowCursor('contact', false),
-            contactBox = false;
+                contactBox = false;
             if (aboutBox != false) aboutBox.focus();
 
         }
