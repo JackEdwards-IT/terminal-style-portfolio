@@ -6,7 +6,7 @@ This is a small project utilising the [Winbox.js](https://nextapps-de.github.io/
 
 [Live Demo](https://jackedwards-it.github.io/terminal-style-portfolio/)
 
-From the homepage the user can click on the top links to open the about, contact and help windows or they can type a command into the terminal.
+From the homepage the user can click on the top links to open the about, contact and help windows or they can type a command into the simulated terminal.
 
 ## Site Controls
 
